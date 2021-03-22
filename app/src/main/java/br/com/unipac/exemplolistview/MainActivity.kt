@@ -1,8 +1,11 @@
 package br.com.unipac.exemplolistview
 
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.ContextMenu
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
@@ -18,6 +21,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         var newsLv = findViewById<ListView>(R.id.listNews)
+
+        var intent = intent
+
+        val titulo = intent.getStringExtra("titulo")
+        val conteudo = intent.getStringExtra("conteudo")
 
         var news1 = News(1, "A hacker's guide to numerical analysis", "Life may toss us ill-conditioned problems, but it is too short to settle for unstable algorithms")
         listNews.add(news1)
@@ -35,14 +43,38 @@ class MainActivity : AppCompatActivity() {
         listNews.add(news7)
         var news8 = News(8, "Introducing the Python package cache5", "Figuring out how to install third-party libraries can derail people from learning to code or starting a new side project.")
         listNews.add(news8)
+        var news9 = News(9, titulo, conteudo)
+        listNews.add(news9)
 
         var newsAdapter = NewsAdapter(this@MainActivity, listNews)
         newsLv.adapter = newsAdapter
 
         newsLv.onItemClickListener = AdapterView.OnItemClickListener{
             adapterView, view, position, id ->
-            Toast.makeText(this@MainActivity, "Cliquei no ${listNews[position].title}", Toast.LENGTH_LONG).show()
+           // Toast.makeText(this@MainActivity, "Cliquei no ${listNews[position].title}", Toast.LENGTH_LONG).show()
         }
+
+        registerForContextMenu(newsLv)
+    }
+
+    override fun onCreateContextMenu(
+        menu: ContextMenu?,
+        v: View?,
+        menuInfo: ContextMenu.ContextMenuInfo?
+    ) {
+        menuInflater.inflate(R.menu.context_menu, menu)
+        menu?.setHeaderTitle("Menus de Opcoes")
+        super.onCreateContextMenu(menu, v, menuInfo)
+    }
+
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            R.id.cadastro -> {
+                val intent = Intent(this@MainActivity, CadastroNoticias::class.java)
+                startActivity(intent)
+            }
+        }
+        return super.onContextItemSelected(item)
     }
 
     inner class NewsAdapter : BaseAdapter {
