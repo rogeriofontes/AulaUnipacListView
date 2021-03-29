@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import br.com.unipac.exemplolistview.db.DatabaseHandler
 import kotlinx.android.synthetic.main.news_item.*
 import java.text.FieldPosition
 
@@ -21,13 +22,14 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         var newsLv = findViewById<ListView>(R.id.listNews)
+        var databaseHandler = DatabaseHandler(this)
 
         var intent = intent
 
         val titulo = intent.getStringExtra("titulo")
         val conteudo = intent.getStringExtra("conteudo")
 
-        var news1 = News(1, "A hacker's guide to numerical analysis", "Life may toss us ill-conditioned problems, but it is too short to settle for unstable algorithms")
+      /*  var news1 = News(1, "A hacker's guide to numerical analysis", "Life may toss us ill-conditioned problems, but it is too short to settle for unstable algorithms")
         listNews.add(news1)
         var news2 = News(2, "Data Science in Julia for Hackers", "We have a habit in writing articles published in scientific journals to make the work as finished as possible, to cover up all the tracks, to not worry about the blind alleys or describe how you had the wrong idea first, and so on - Richard Feynman")
         listNews.add(news2)
@@ -45,6 +47,9 @@ class MainActivity : AppCompatActivity() {
         listNews.add(news8)
         var news9 = News(9, titulo, conteudo)
         listNews.add(news9)
+*/
+
+        listNews = databaseHandler.getNews()
 
         var newsAdapter = NewsAdapter(this@MainActivity, listNews)
         newsLv.adapter = newsAdapter
